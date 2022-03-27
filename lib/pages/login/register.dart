@@ -139,61 +139,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       SizedBox(height: 20,),
-                      Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(8)),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () async {
-                                if(_formKey.currentState!.validate())
+                      Material(
+                        color: Colors.purple,
+                        child: InkWell(
+                          onTap: () async {
+                            if(_formKey.currentState!.validate())
+                            {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              String? dataResponse = await postDataRequest(
+                                context,
+                                URLS.userRegisterDetailUrl, 
+                                {"cus_id": prefs.getString("cus_id"), 
+                                "name": cusname, 
+                                "email_id": cusemail, 
+                                "contact": widget.phone,
+                                "address": cusaddress
+                                "latitude": mapLocationMarked.latitude
+                                "longitude": mapLocationMarked.longitude}
+                              );
+                              //String? dataResponse = await postDataRequest(context,URLS.addCategoryUrl, {"type_id": ,: cname, "cdesc": cdesc, "cstatus": checkedValue});
+                              if(dataResponse!=null)
+                              {
+                                await prefs.setBool("LoggedIn", true);
+                                await prefs.setString("contact", widget.phone);
+                                await prefs.setString("address", cusaddress);                          
+                                showToast("Saved Data Successfully",Toast.LENGTH_LONG,Colors.green,Colors.white);  
+                                if(!widget.fromHome)
                                 {
-                                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  String? dataResponse = await postDataRequest(
+                                  Navigator.pushAndRemoveUntil(
                                     context,
-                                    URLS.userRegisterDetailUrl, 
-                                    {"cus_id": prefs.getString("cus_id"), 
-                                    "name": cusname, 
-                                    "email_id": cusemail, 
-                                    "contact": widget.phone,
-                                    "address": cusaddress
-                                    "latitude": mapLocationMarked.latitude
-                                    "longitude": mapLocationMarked.longitude}
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) => ViewCartScreen(cartDataList: CartModel.cartDataList,),
+                                    ),
+                                    (route) => false,
                                   );
-                                  //String? dataResponse = await postDataRequest(context,URLS.addCategoryUrl, {"type_id": ,: cname, "cdesc": cdesc, "cstatus": checkedValue});
-                                  if(dataResponse!=null)
-                                  {
-                                    await prefs.setBool("LoggedIn", true);
-                                    await prefs.setString("contact", widget.phone);                          
-                                    showToast("Saved Data Successfully",Toast.LENGTH_LONG,Colors.green,Colors.white);  
-                                    if(widget.fromHome)
-                                    {
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) => ViewCartScreen(cartDataList: CartModel.cartDataList,),
-                                        ),
-                                        (route) => false,
-                                      );
-                                    }else{
-                                      Navigator.pushAndRemoveUntil(
-                                        context,MaterialPageRoute(builder: (BuildContext context) => HomePage(),),
-                                        (route) => false,
-                                      );
-                                    }
-                                    //Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewCartScreen(cartDataList: CartModel.cartDataList,)));
-                                  }else{
-                                    showToast("Failed to save data",Toast.LENGTH_LONG,Colors.red,Colors.white);
-                                  }
-                                
+                                }else{
+                                  Navigator.pushAndRemoveUntil(
+                                    context,MaterialPageRoute(builder: (BuildContext context) => HomePage(),),
+                                    (route) => false,
+                                  );
                                 }
-                              },
+                                //Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewCartScreen(cartDataList: CartModel.cartDataList,)));
+                              }else{
+                                showToast("Failed to save data",Toast.LENGTH_LONG,Colors.red,Colors.white);
+                              }
+                            
+                            }
+                          },
+                          child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(8)),
                               child: Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text("Save", style: TextStyle(letterSpacing: 2,color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
                               ),
-                            ),
                           ),
+                        ),
                       ),
                   ],),
                 ),

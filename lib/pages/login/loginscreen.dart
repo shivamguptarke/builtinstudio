@@ -47,21 +47,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(8)),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> OTPScreen(phone: _phoneController.text, fromHome: widget.fromHome,)));
-                        },
+                Material(
+                  color: Colors.purple,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> OTPScreen(phone: _phoneController.text, fromHome: widget.fromHome,)));
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(8)),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text("Send OTP", style: TextStyle(letterSpacing: 2,color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
                         ),
-                      ),
                     ),
+                  ),
                 ),
             ],),
           ),

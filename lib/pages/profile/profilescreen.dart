@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../homepage.dart';
 import '../login/loginscreen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -127,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileSettingButton(size: widget.size, btnlabel: "Need Help ?", iconData: Icons.help, tapfunction: _launchURL,url: 'mailto:contact@builtinstudio.in?subject=Need help&body=',),
                 ProfileSettingButton(size: widget.size, btnlabel: "Contact Us", iconData: Icons.contacts, tapfunction: _launchURL,url: 'https://builtinstudio.in/contact',),
                 ProfileSettingButton(size: widget.size, btnlabel: "Share Built-IN Studio", iconData: Icons.share, tapfunction: _ShareApp,url: 'https://builtinstudio.in/about',),
-                ProfileSettingButton(size: widget.size, btnlabel: "Logout", iconData: Icons.logout, tapfunction: _launchURL,url: 'https://builtinstudio.in/about',),
+                ProfileSettingButton(size: widget.size, btnlabel: "Logout", iconData: Icons.logout, tapfunction: _logOut,url: 'https://builtinstudio.in/about',),
                 //ProfileSettingButton(size: widget.size, btnlabel: "Change App Theme", iconData: Icons.format_paint, tapfunction: _changeTheme,url: 'https://builtinstudio.in/about',),
               ],
             ),
@@ -163,6 +164,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  _logOut(String url) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    setState(() {});
   }
 
   _ShareApp(String url) async {

@@ -173,21 +173,21 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     ),
                   ),
                   SizedBox(height:20),
-                  Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.blue.withOpacity(.10), borderRadius: BorderRadius.circular(8)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text("Address", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600, fontSize: 15)),
-                          Spacer(),
-                          Text("", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600, fontSize: 15)),
-                          IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.info_circle,))
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   decoration: BoxDecoration(color: Colors.blue.withOpacity(.10), borderRadius: BorderRadius.circular(8)),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Row(
+                  //       children: [
+                  //         Text("Address", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600, fontSize: 15)),
+                  //         Spacer(),
+                  //         Text("", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600, fontSize: 15)),
+                  //         IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.info_circle,))
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height:20),
                   (selectedTimeSlot!='' && selectedDaySlot!='') ? Container(
                     alignment: Alignment.center,
@@ -212,43 +212,43 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     ),
                   ) : Container(),
                   SizedBox(height:30),
-                  Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(8)),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () async {
-                          if(isLoggedIn){
-                            if(selectedTimeSlot!='' && selectedDaySlot!='' && isSlotSelected){
-                              //booking post call
-                              //showToast("here update after time slot", Toast.LENGTH_SHORT, Colors.black, Colors.amber);
-                              for (var cartData in widget.cartDataList) {
-                                 postCartDataList.add(
-                                   new PostCartData(
-                                     sid: cartData.serviceData.sid,
-                                     quantity: cartData.quantity.toString(),
-                                     price: cartData.serviceData.sprice,
-                                     d_price: cartData.serviceData.sprice,
-                                     sname: cartData.serviceData.sname 
-                                    )
+                  Material(
+                    color: Colors.purple,
+                    child: InkWell(
+                      onTap: () {
+                        if(isLoggedIn){
+                              if(selectedTimeSlot!='' && selectedDaySlot!='' && isSlotSelected){
+                                //booking post call
+                                //showToast("here update after time slot", Toast.LENGTH_SHORT, Colors.black, Colors.amber);
+                                for (var cartData in widget.cartDataList) {
+                                   postCartDataList.add(
+                                     new PostCartData(
+                                       sid: cartData.serviceData.sid,
+                                       quantity: cartData.quantity.toString(),
+                                       price: cartData.serviceData.sprice,
+                                       d_price: cartData.serviceData.sprice,
+                                       sname: cartData.serviceData.sname 
+                                      )
+                                  );
+                                }
+                                print(postCartDataList.length);
+                                openCheckout();  
+                              }else{
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                                  context: context, 
+                                  builder: (context) => TimeSlotBottomSheet(),
                                 );
                               }
-                              print(postCartDataList.length);
-                              openCheckout();  
+                              //showToast("logged in already", Toast.LENGTH_SHORT, Colors.transparent, Colors.amber);
                             }else{
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                                context: context, 
-                                builder: (context) => TimeSlotBottomSheet(),
-                              );
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen(fromHome: false,)));
                             }
-                            //showToast("logged in already", Toast.LENGTH_SHORT, Colors.transparent, Colors.amber);
-                          }else{
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen(fromHome: false,)));
-                          }
-                        },
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(8)),
                         child: (selectedTimeSlot!='' && selectedDaySlot!='') ? Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text("Proceed to Payment", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),

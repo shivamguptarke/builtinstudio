@@ -59,33 +59,33 @@ class _OTPScreenState extends State<OTPScreen> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(8)),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () async {
-                          try{
-                            PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationIdRecieved, smsCode: _otpController.text);
-                            // Sign the user in (or link) with the credential
-                            await auth.signInWithCredential(credential).then((value) {
-                              if(value!=null){
-                                showToast("Phone Verified Successfully!", Toast.LENGTH_LONG, Colors.green, Colors.white);
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterScreen(phone: widget.phone, fromHome: widget.fromHome,)));
-                              }
-                            });
-                          }catch(e){
-                            showToast("Invalid OTP", Toast.LENGTH_LONG, Colors.red, Colors.white);
+                Material(
+                  color: Colors.purple,
+                  child: InkWell(
+                    onTap: () async {
+                      try{
+                        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationIdRecieved, smsCode: _otpController.text);
+                        // Sign the user in (or link) with the credential
+                        await auth.signInWithCredential(credential).then((value) {
+                          if(value!=null){
+                            showToast("Phone Verified Successfully!", Toast.LENGTH_LONG, Colors.green, Colors.white);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterScreen(phone: widget.phone, fromHome: widget.fromHome,)));
                           }
-                         // Navigator.push(context, MaterialPageRoute(builder: (context)=> OTPScreen(phone: _phoneController.text)));
-                        },
+                        });
+                      }catch(e){
+                        print(e.toString());
+                        showToast("Invalid OTP", Toast.LENGTH_LONG, Colors.red, Colors.white);
+                      }
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(8)),
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text("Verify Number", style: TextStyle(letterSpacing: 2,color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
                         ),
-                      ),
                     ),
+                  ),
                 ),
                 SizedBox(height: 30,),
                 // Text("Didn't received any OTP? Click here.",
