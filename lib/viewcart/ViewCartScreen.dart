@@ -346,7 +346,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
         "payment_status" : true,
         "payment_id" : "samplepaymentid847236",
         "address" : "address",
-        "total" : CartModel.getCartTotal().toString()
+        "total" : (CartModel.getCartTotal()*100)
       }
     );
     //String? dataResponse = await postDataRequest(context,URLS.addCategoryUrl, {"type_id": ,: cname, "cdesc": cdesc, "cstatus": checkedValue});
