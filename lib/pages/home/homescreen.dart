@@ -124,32 +124,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      width: widget.size.width,
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(offset: Offset(0,10), blurRadius: 20,color: Colors.orange.withOpacity(.2))]), 
-                      height: widget.size.height*.05,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "Search",
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none
-                                ),
-                              ),
-                            ),
-                            Icon(Icons.search),
-                          ],
-                        ),
-                      )
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(20.0),
+                  //   child: Container(
+                  //     alignment: Alignment.centerLeft,
+                  //     width: widget.size.width,
+                  //     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(offset: Offset(0,10), blurRadius: 20,color: Colors.orange.withOpacity(.2))]), 
+                  //     height: widget.size.height*.05,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.only(left: 20, right: 20),
+                  //       child: Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: TextFormField(
+                  //               decoration: InputDecoration(
+                  //                 hintText: "Search",
+                  //                 enabledBorder: InputBorder.none,
+                  //                 focusedBorder: InputBorder.none
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Icon(Icons.search),
+                  //         ],
+                  //       ),
+                  //     )
+                  //   ),
+                  // ),
+                  SizedBox(height: 20,),
                   CarouselSlider(
                     items: imgList.map(
                       (item) => Container(
@@ -171,6 +172,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         serviceTypeData: ServiceTypeDataModel.serviceTypeDataList.elementAt(index),
                       )
                     ),
+                  SizedBox(height: 50,),
+                  Align(alignment: Alignment.center,child: Text("End of list")),
+                  SizedBox(height: 30,),
               ],
             ),
           );
