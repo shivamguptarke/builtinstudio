@@ -19,7 +19,7 @@ class MyRoutes{
   static String addCityRoute = "/addCity";
   static String addTypeRoute = "/addType";
   static String manageCategoryRoute = "/manageCategory";
-  static String initialUrlRoute = "http://192.168.1.109/";
+  static String initialUrlRoute = "https://builtinstudio.in/";
 }
 
 class URLS{
