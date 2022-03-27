@@ -142,7 +142,7 @@ class BookingHistoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String>  bookingStatus= ["Pending Booking","Booking Accepted","Booking-in-progress","Booking Completed"];
+    List<String>  bookingStatus= ["Pending Booking","Booking Accepted","Booking-in-progress"];
 
     return Container(
       decoration: BoxDecoration(
@@ -193,7 +193,7 @@ class BookingHistoryWidget extends StatelessWidget {
                             children: [
                               Text("Current Status", style: TextStyle(color: Colors.grey, fontSize: 12),),
                               Spacer(),
-                              Text(bookingStatus.elementAt(int.parse(historyData.current_status)), style: TextStyle(color: Colors.green, fontWeight: FontWeight.w800),),
+                              Text(!historyData.status ? bookingStatus.elementAt(int.parse(historyData.current_status)-1) : "Booking Completed", style: TextStyle(color: Colors.green, fontWeight: FontWeight.w800),),
                             ],
                           ),
                           SizedBox(height: 10,),
