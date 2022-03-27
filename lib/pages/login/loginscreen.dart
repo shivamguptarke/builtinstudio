@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'otpscreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({ Key? key }) : super(key: key);
+  final bool fromHome;
+  const LoginScreen({ Key? key, required this.fromHome }) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> OTPScreen(phone: _phoneController.text)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> OTPScreen(phone: _phoneController.text, fromHome: widget.fromHome,)));
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),

@@ -6,7 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
-  const OTPScreen({ Key? key, required this.phone }) : super(key: key);
+  final bool fromHome;
+  const OTPScreen({ Key? key, required this.phone, required this.fromHome }) : super(key: key);
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -71,7 +72,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             await auth.signInWithCredential(credential).then((value) {
                               if(value!=null){
                                 showToast("Phone Verified Successfully!", Toast.LENGTH_LONG, Colors.green, Colors.white);
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterScreen(phone: widget.phone)));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterScreen(phone: widget.phone, fromHome: widget.fromHome,)));
                               }
                             });
                           }catch(e){
@@ -87,8 +88,8 @@ class _OTPScreenState extends State<OTPScreen> {
                     ),
                 ),
                 SizedBox(height: 30,),
-                Text("Didn't received any OTP? Click here.",
-                textAlign: TextAlign.center, style: TextStyle(fontSize: 15,color: Colors.purple[800])),
+                // Text("Didn't received any OTP? Click here.",
+                // textAlign: TextAlign.center, style: TextStyle(fontSize: 15,color: Colors.purple[800])),
             ],),
           ),
         ),

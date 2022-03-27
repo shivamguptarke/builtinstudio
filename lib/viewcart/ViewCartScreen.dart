@@ -246,7 +246,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                             }
                             //showToast("logged in already", Toast.LENGTH_SHORT, Colors.transparent, Colors.amber);
                           }else{
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen(fromHome: false,)));
                           }
                         },
                         child: (selectedTimeSlot!='' && selectedDaySlot!='') ? Padding(

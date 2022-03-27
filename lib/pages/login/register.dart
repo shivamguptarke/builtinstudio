@@ -11,11 +11,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../homepage.dart';
 import 'otpscreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String phone;
-  const RegisterScreen({ Key? key, required this.phone }) : super(key: key);
+  final bool fromHome;
+  const RegisterScreen({ Key? key, required this.phone, required this.fromHome }) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -164,13 +166,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     await prefs.setBool("LoggedIn", true);
                                     await prefs.setString("contact", widget.phone);                          
                                     showToast("Saved Data Successfully",Toast.LENGTH_LONG,Colors.green,Colors.white);  
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) => ViewCartScreen(cartDataList: CartModel.cartDataList,),
-                                      ),
-                                      (route) => false,
-                                    );
+                                    if(widget.fromHome)
+                                    {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) => ViewCartScreen(cartDataList: CartModel.cartDataList,),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    }else{
+                                      Navigator.pushAndRemoveUntil(
+                                        context,MaterialPageRoute(builder: (BuildContext context) => HomePage(),),
+                                        (route) => false,
+                                      );
+                                    }
                                     //Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewCartScreen(cartDataList: CartModel.cartDataList,)));
                                   }else{
                                     showToast("Failed to save data",Toast.LENGTH_LONG,Colors.red,Colors.white);

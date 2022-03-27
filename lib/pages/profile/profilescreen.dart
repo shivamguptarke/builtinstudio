@@ -10,6 +10,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../login/loginscreen.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
     Key? key,
@@ -64,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.purple ),
                     onPressed: ()=> setState(() {
-                    loadUserData();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen(fromHome: true,)));
                   }), child: Text("LOGIN / SIGN-UP", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),))
                 ],
               ))),
