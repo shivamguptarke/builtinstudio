@@ -130,7 +130,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         Text("Item Total",style: TextStyle(fontSize: 16)),
                         Spacer(),
-                        Text("Rs " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(),style: TextStyle(fontSize: 16))
+                        Text("₹ " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(),style: TextStyle(fontSize: 16))
                       ],
                     ),
                   ),
@@ -140,7 +140,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         Text("Item Discount",style: TextStyle(fontSize: 16)),
                         Spacer(),
-                        Text("-Rs 482",style: TextStyle(fontSize: 16, color: Colors.green))
+                        Text("-₹ 482",style: TextStyle(fontSize: 16, color: Colors.green))
                       ],
                     ),
                   ),
@@ -150,7 +150,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         Text("Convenience & Safety Fee",style: TextStyle(fontSize: 16)),
                         Spacer(),
-                        Text("Rs 45",style: TextStyle(fontSize: 16))
+                        Text("₹ 45",style: TextStyle(fontSize: 16))
                       ],
                     ),
                   ),
@@ -161,7 +161,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         Text("Total",style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                         Spacer(),
-                        Text("Rs " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(),style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800))
+                        Text("₹ " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(),style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800))
                       ],
                     ),
                   ),
@@ -171,7 +171,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                     decoration: BoxDecoration(color: Colors.green.withOpacity(.15), borderRadius: BorderRadius.circular(8)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Yay! You saved Rs456 on final bill", style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600, fontSize: 15)),
+                      child: Text("Yay! You saved Rs 456 on final bill", style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600, fontSize: 15)),
                     ),
                   ),
                   SizedBox(height:20),

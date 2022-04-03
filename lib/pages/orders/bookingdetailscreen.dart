@@ -159,7 +159,7 @@ class _BookingDetailState extends State<BookingDetail> {
                             children: [
                               Text("Total Amount"),
                               Spacer(),
-                              Text(HistoryDetailDataModel.historyDetailDataList[0].total, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),)
+                              Text("₹ " + HistoryDetailDataModel.historyDetailDataList[0].total, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),)
                           ],),
                         ),
                         Divider(),
@@ -232,13 +232,15 @@ class CardBookingHistoryDetail extends StatelessWidget {
           Text((count+1).toString() + "." ,style: TextStyle(fontSize: 15)),
           SizedBox(width: 20,),
           Expanded(child: Text(cartData.sname)),
+          Text("   x   "),
+          Text(cartData.quantity),
           Spacer(),
           SizedBox(width: 20,),
           Column(
             children: [
-              Text(cartData.d_price, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)),
+              Text("₹ " + cartData.d_price, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)),
               SizedBox(height: 5,),
-              Text(cartData.price, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 12, decoration: TextDecoration.lineThrough)),
+              Text("₹ " + cartData.price, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 12, decoration: TextDecoration.lineThrough)),
             ],
           ),                
         ],

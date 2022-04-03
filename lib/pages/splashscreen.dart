@@ -101,11 +101,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Image.asset("assets/images/logo.png"),
                 )),
             ),
-            SizedBox(height: 150,),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Text("Loading.........", style: TextStyle(fontSize: 15,letterSpacing: 1),),
-            ),
+            SizedBox(height: 200,),
+            // Padding(
+            //   padding: const EdgeInsets.all(30.0),
+            //   child: Text("Loading.........", style: TextStyle(fontSize: 15,letterSpacing: 1),),
+            // ),
             CircularProgressIndicator(),
           ],
         ),
