@@ -14,12 +14,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:group_button/group_button.dart';
 import 'package:intl/intl.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../provider/cart_provider.dart';
+
 class ViewCartScreen extends StatefulWidget {
-  final List<CartData> cartDataList;
-  const ViewCartScreen({ Key? key, required this.cartDataList }) : super(key: key);
+  const ViewCartScreen({ Key? key }) : super(key: key);
 
   @override
   State<ViewCartScreen> createState() => _ViewCartScreenState();
@@ -30,7 +32,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
   bool isLoggedIn = false, isSlotSelected = false;
   String selectedDaySlot='',selectedTimeSlot='';
 
-  String mid = "gdHgFj37957982279188", orderId = "", amount = "", txnToken = "";
+  String mid = "gdHgFj37957982279188", orderId = "", amount = "", txnToken = "", total='';
   String result = "";
   bool isStaging = false;
   bool isApiCallInprogress = false;
@@ -55,23 +57,23 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     _startBooking();
     Fluttertoast.showToast(
         msg: "SUCCESS: " + response.paymentId.toString(), timeInSecForIosWeb: 4);
+    print("SUCCESS: " + response.paymentId.toString());
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     Fluttertoast.showToast(
-        msg: "ERROR: " + response.code.toString() + " - " + response.message.toString(),
-        timeInSecForIosWeb: 4);
+        msg: "Payment Failed", timeInSecForIosWeb: 4);
+    print("ERROR: " + response.code.toString() + " - " + response.message.toString());
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: " + response.walletName.toString(), timeInSecForIosWeb: 4);
+    print("EXTERNAL_WALLET: " + response.walletName.toString());
   }
 
   void openCheckout() async {
     var options = {
       'key': 'rzp_test_FRQ4w0vTPOezPy',
-      'amount': CartModel.getCartTotal(),
+      'amount': total,
       'name': 'Built-IN Studio',
       'description': 'Payment',
       'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
@@ -102,18 +104,18 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
     return Scaffold(
       appBar: AppBar(foregroundColor: Colors.white, backgroundColor: Colors.orange, title: Text("Summary"),),
       body: SingleChildScrollView(
-        child: Column(
+        child: Provider.of<CartProvider>(context).cartDataList.isNotEmpty ? Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: [ 
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.cartDataList.length,
+                    itemCount: Provider.of<CartProvider>(context).cartDataList.length,
                     itemBuilder: (context, index) => CartItemCard(
-                      size: size, cartData: widget.cartDataList.elementAt(
+                      size: size, cartData: Provider.of<CartProvider>(context).cartDataList.elementAt(
                       index)
                     )
                   ),
@@ -128,7 +130,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         Text("Item Total",style: TextStyle(fontSize: 16)),
                         Spacer(),
-                        Text("Rs 456",style: TextStyle(fontSize: 16))
+                        Text("Rs " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(),style: TextStyle(fontSize: 16))
                       ],
                     ),
                   ),
@@ -159,7 +161,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                       children: [
                         Text("Total",style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                         Spacer(),
-                        Text("Rs " + CartModel.getCartTotal().toString(),style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800))
+                        Text("Rs " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(),style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800))
                       ],
                     ),
                   ),
@@ -220,7 +222,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                               if(selectedTimeSlot!='' && selectedDaySlot!='' && isSlotSelected){
                                 //booking post call
                                 //showToast("here update after time slot", Toast.LENGTH_SHORT, Colors.black, Colors.amber);
-                                for (var cartData in widget.cartDataList) {
+                                for (var cartData in Provider.of<CartProvider>(context,listen: false).cartDataList) {
                                    postCartDataList.add(
                                      new PostCartData(
                                        sid: cartData.serviceData.sid,
@@ -232,6 +234,7 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
                                   );
                                 }
                                 print(postCartDataList.length);
+                                total = (Provider.of<CartProvider>(context,listen: false).getCartTotal()*100).toString();
                                 openCheckout();  
                               }else{
                                 showModalBottomSheet(
@@ -263,7 +266,20 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
               ), 
             )
           ],
-        ),
+        ) : Container(child: Material(child: Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 100,),
+                Image.asset("assets/images/empty_cart.png"),
+                SizedBox(height: 30,),
+                Text("Cart is Empty !"),
+                SizedBox(height: 30,),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.purple ),
+                  onPressed: ()=> Navigator.pop(context), 
+                  child: Text("GO BACK", style: TextStyle(color: Colors.white),))
+              ],
+            )))),
       ),
     );
   }
@@ -339,14 +355,14 @@ class _ViewCartScreenState extends State<ViewCartScreen> {
       URLS.userPostBookingUrl, 
       {
         "cus_id": prefs.getString("cus_id"), 
-        "admin_id": widget.cartDataList[0].serviceData.admin_id 
+        "admin_id": Provider.of<CartProvider>(context, listen: false).cartDataList[0].serviceData.admin_id 
         "contact": prefs.getString("contact"), 
         "time_slot" : selectedDaySlot  + "  " + selectedTimeSlot,
         "CartDataList": jsonEncode(postCartDataList),
         "payment_status" : true,
         "payment_id" : "samplepaymentid847236",
         "address" : "address",
-        "total" : (CartModel.getCartTotal()*100)
+        "total" : (Provider.of<CartProvider>(context,listen: false).getCartTotal()*100)
       }
     );
     //String? dataResponse = await postDataRequest(context,URLS.addCategoryUrl, {"type_id": ,: cname, "cdesc": cdesc, "cstatus": checkedValue});
@@ -512,8 +528,10 @@ class CartItemCard extends StatelessWidget {
               SizedBox(
                 width: size.width*.1,
                 child: ElevatedButton(
-                  onPressed: (){}, 
-                  child: Text("+", style: TextStyle(color: Colors.white, fontSize: 25),)
+                  onPressed: (){
+                    Provider.of<CartProvider>(context,listen: false).decrement(cartData.serviceData);  
+                  }, 
+                  child: Text("-", style: TextStyle(color: Colors.white, fontSize: 25),)
                 ),
               ),
               Padding(
@@ -523,8 +541,10 @@ class CartItemCard extends StatelessWidget {
               SizedBox(
                 width: size.width*.1,
                 child: ElevatedButton(
-                  onPressed: (){}, 
-                  child: Text("-", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 25),)
+                  onPressed: (){
+                    Provider.of<CartProvider>(context,listen: false).increment(cartData.serviceData);
+                  }, 
+                  child: Text("+", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 25),)
                 ),
               ),
             ],

@@ -56,41 +56,41 @@ class CartData {
   int get hashCode => serviceData.hashCode ^ quantity.hashCode;
 }
 
-class CartModel {
-  static List<CartData> cartDataList=[];
+// class CartModel {
+//   static List<CartData> cartDataList=[];
 
   
-  static CartData? checkData(ServiceData serviceData)
-  {
-    for (var cart in CartModel.cartDataList) {
-      if(cart.serviceData == serviceData)
-      {
-        return cart;
-      }
-    }
-    return null;
-  }
+//   static CartData? checkData(ServiceData serviceData)
+//   {
+//     for (var cart in CartModel.cartDataList) {
+//       if(cart.serviceData == serviceData)
+//       {
+//         return cart;
+//       }
+//     }
+//     return null;
+//   }
 
-  static bool checkDataBool(ServiceData serviceData)
-  {
-    for (var cart in CartModel.cartDataList) {
-      if(cart.serviceData == serviceData)
-      {
-        return true;
-      }
-    }
-    return false;
-  }
+//   static bool checkDataBool(ServiceData serviceData)
+//   {
+//     for (var cart in CartModel.cartDataList) {
+//       if(cart.serviceData == serviceData)
+//       {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
 
-  static double getCartTotal()
-  {
-    double cartTotal = 0,itemPrice;
+//   static double getCartTotal()
+//   {
+//     double cartTotal = 0,itemPrice;
 
-    for(var cart in CartModel.cartDataList)
-    {
-      itemPrice = double.parse(cart.serviceData.sprice);
-      cartTotal = cartTotal + itemPrice*cart.quantity.toDouble() ;
-    }
-    return cartTotal;
-  }
-}
+//     for(var cart in CartModel.cartDataList)
+//     {
+//       itemPrice = double.parse(cart.serviceData.sprice);
+//       cartTotal = cartTotal + itemPrice*cart.quantity.toDouble() ;
+//     }
+//     return cartTotal;
+//   }
+// }

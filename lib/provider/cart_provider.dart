@@ -9,6 +9,8 @@ class CartProvider with ChangeNotifier{
 
   List<CartData> get cartDataList => _cartDataList;
 
+  void reset() => _cartDataList=[];
+
   CartData? checkData(ServiceData serviceData)
   {
     for (var cart in _cartDataList) {
@@ -43,9 +45,40 @@ class CartProvider with ChangeNotifier{
     return cartTotal;
   }
 
-  // void reset(){
-  //   _count = 0;
-  //   notifyListeners();
-  // }
+  void addToCart(ServiceData serviceData){
+    _cartDataList.add(new CartData(serviceData, 1));
+    notifyListeners();
+  }
 
+  void decrement(ServiceData serviceData)
+  {
+    for (var cart in _cartDataList) {
+      if(cart.serviceData == serviceData)
+      {
+        if(cart.quantity>1)
+        {
+          cart.quantity--;
+          break;
+        }
+        else{
+          _cartDataList.remove(cart);
+          break;
+        }
+      }
+    }
+    notifyListeners();
+  }
+
+  void increment(ServiceData serviceData)
+  {
+    for (var cart in _cartDataList) {
+      if(cart.serviceData == serviceData)
+      {
+        cart.quantity++;
+        //notifyListeners();
+        break;
+      }
+    }
+    notifyListeners();
+  }
 }

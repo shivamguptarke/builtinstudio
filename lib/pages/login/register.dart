@@ -9,8 +9,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../provider/cart_provider.dart';
 import '../homepage.dart';
 import 'otpscreen.dart';
 
@@ -169,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (BuildContext context) => ViewCartScreen(cartDataList: CartModel.cartDataList,),
+                                      builder: (BuildContext context) => ViewCartScreen(),
                                     ),
                                     (route) => false,
                                   );

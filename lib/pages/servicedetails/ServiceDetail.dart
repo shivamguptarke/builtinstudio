@@ -1,8 +1,8 @@
-import 'package:builtinstudio/data/CartData.dart';
 import 'package:builtinstudio/data/ServiceData.dart';
+import 'package:builtinstudio/provider/cart_provider.dart';
 import 'package:builtinstudio/viewcart/Viewcartscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 import '../routes.dart';
 import 'viewService.dart';
@@ -21,13 +21,7 @@ class ServiceDetailScreen extends StatefulWidget {
 }
 
 class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
-
-  callback (){
-    setState(() {
-      CartModel.getCartTotal();
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -44,7 +38,6 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                   itemBuilder: (context, index) => SubCategoryCard(
                     serviceSubCategoryData: widget.serviceSubCategoryDataList.elementAt(index), 
                     size: size,
-                    callback: callback,
                   ),
             ),
             Padding(
@@ -56,8 +49,8 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
         ), 
       ) : Container(child: Center(child: Text("no service available")),),
       bottomSheet: SizedBox(
-        height: CartModel.cartDataList.isNotEmpty ? 100 : 0,
-        child: CartModel.cartDataList.isNotEmpty ? Column(        
+        height: Provider.of<CartProvider>(context).cartDataList.isNotEmpty ? 100 : 0,
+        child: Provider.of<CartProvider>(context).cartDataList.isNotEmpty ? Column(        
           children: [
             Container(
               width: size.width,
@@ -74,15 +67,15 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               child: Container(
                 width: size.width,
                 child: Row(children: [
-                  Text("₹ " + CartModel.getCartTotal().toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)),
+                  Text("₹ " + Provider.of<CartProvider>(context,listen: false).getCartTotal().toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)),
                   SizedBox(width: 20,),
                   Text("₹ 5467", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600, fontSize: 15, decoration: TextDecoration.lineThrough)),
                   Spacer(),
                   InkWell(
                     onTap: () {
-                      showToast(CartModel.cartDataList.length.toString(), Toast.LENGTH_LONG, Colors.green, Colors.white);
-                      print(CartModel.cartDataList.toString());
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewCartScreen(cartDataList: CartModel.cartDataList)));
+                      //showToast(CartModel.cartDataList.length.toString(), Toast.LENGTH_LONG, Colors.green, Colors.white);
+                      //print(Provider.of<CartProvider>(context).cartDataList.toString());
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewCartScreen()));
                     },
                     child: Container(
                       width: size.width*.4,
@@ -105,11 +98,10 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
 }
 
 class SubCategoryCard extends StatefulWidget {
-  final Function callback;
   const SubCategoryCard({
     Key? key,
     required this.serviceSubCategoryData,
-    required this.size, required this.callback,
+    required this.size,
   }) : super(key: key);
 
   final ServiceSubCategoryData serviceSubCategoryData;
@@ -120,11 +112,6 @@ class SubCategoryCard extends StatefulWidget {
 }
 
 class _SubCategoryCardState extends State<SubCategoryCard> {
-
-  callbackTotal ()
-  {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,8 +135,6 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
           itemBuilder: (context, index) => ServiceCard(
             size: widget.size,
             serviceData: widget.serviceSubCategoryData.service.elementAt(index),
-            callback: callbackTotal,
-            callbackWhole: widget.callback
         )),
       ],
     )
@@ -158,11 +143,10 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
 }
 
 class ServiceCard extends StatefulWidget {
-  final Function callback,callbackWhole;
   final ServiceData serviceData;
   const ServiceCard({
     Key? key,
-    required this.size, required this.serviceData, required this.callback, required this.callbackWhole,
+    required this.size, required this.serviceData,
   }) : super(key: key);
 
   final Size size;
@@ -172,12 +156,6 @@ class ServiceCard extends StatefulWidget {
 }
 
 class _ServiceCardState extends State<ServiceCard> {
-
-  reloadUI(){
-    setState(() {
-      
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,16 +198,18 @@ class _ServiceCardState extends State<ServiceCard> {
                         children: [
                           Text("₹ " + widget.serviceData.sprice, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 15), maxLines: 2,),
                           Spacer(),
-                          CartModel.checkDataBool(widget.serviceData) ? 
-                          AfterAddButton(size: widget.size, serviceData : widget.serviceData, callback: widget.callbackWhole) :
-                          ElevatedButton(
-                            onPressed: (){
-                              setState(() {
-                                CartModel.cartDataList.add(new CartData(widget.serviceData, 1));
-                                widget.callbackWhole();
-                              });
-                            }, 
-                            child: Text(" +  ADD", style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 2),)
+                          Provider.of<CartProvider>(context,listen: false).checkDataBool(widget.serviceData) ?
+                          //CartModel.checkDataBool(widget.serviceData) ? 
+                          AfterAddButton(size: widget.size, serviceData : widget.serviceData) 
+                          : ElevatedButton(
+                              onPressed: (){
+                                setState(() {
+                                  Provider.of<CartProvider>(context,listen: false).addToCart(widget.serviceData);
+                                  //CartModel.cartDataList.add(new CartData(widget.serviceData, 1));
+                                  //widget.callbackWhole();
+                                });
+                              }, 
+                              child: Text(" +  ADD", style: TextStyle(color: Colors.white,fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 2),)
                           )
                         ],
                       ),
@@ -247,10 +227,9 @@ class _ServiceCardState extends State<ServiceCard> {
 
 class AfterAddButton extends StatefulWidget {
   final ServiceData serviceData;
-  final Function callback;
   const AfterAddButton({
     Key? key,
-    required this.size, required this.serviceData, required this.callback,
+    required this.size, required this.serviceData
   }) : super(key: key);
 
   final Size size;
@@ -268,22 +247,7 @@ class _AfterAddButtonState extends State<AfterAddButton> {
           width: widget.size.width*.1,
           child: ElevatedButton(
             onPressed: (){
-              for (var cart in CartModel.cartDataList) {
-                if(cart.serviceData==widget.serviceData)
-                {
-                  if(cart.quantity>1)
-                  {
-                    cart.quantity--;
-                    break;
-                  }
-                  else{
-                    CartModel.cartDataList.remove(cart);
-                    break;
-                    //widget.reloadUI();
-                  }
-                }
-              }
-              widget.callback();  
+              Provider.of<CartProvider>(context,listen: false).decrement(widget.serviceData);  
             }, 
             child: Text("-", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 25),)
           ),
@@ -291,7 +255,8 @@ class _AfterAddButtonState extends State<AfterAddButton> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            CartModel.checkData(widget.serviceData) !=null ? CartModel.checkData(widget.serviceData)!.quantity.toString() : "" , 
+            Provider.of<CartProvider>(context,listen: false).checkData(widget.serviceData) !=null ? 
+            Provider.of<CartProvider>(context,listen: false).checkData(widget.serviceData)!.quantity.toString() : "" , 
             style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 2),
           ),
         ),
@@ -299,15 +264,7 @@ class _AfterAddButtonState extends State<AfterAddButton> {
           width: widget.size.width*.1,
           child: ElevatedButton(
             onPressed: (){
-              setState(() {
-                widget.callback();
-                for (var cart in CartModel.cartDataList) {
-                  if(cart.serviceData==widget.serviceData)
-                  {
-                    cart.quantity++;
-                  }
-                }
-              });
+              Provider.of<CartProvider>(context,listen: false).increment(widget.serviceData);
             }, 
             child: Text("+", style: TextStyle(color: Colors.white, fontSize: 25),)
           ),

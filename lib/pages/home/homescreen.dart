@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:builtinstudio/pages/subcategory/SubCategoryScreen.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/ServiceData.dart';
+import '../../provider/cart_provider.dart';
 import '../routes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -247,7 +249,8 @@ class CategoryCardHome extends StatelessWidget {
             //   appBarTitle: serviceCategoryData.cname,
             //   ))
             // );
-            CartModel.cartDataList = [];
+            //CartModel.cartDataList = [];
+            Provider.of<CartProvider>(context,listen: false).reset();
             Navigator.push(context, MaterialPageRoute(builder: (context)=> ServiceDetailScreen(
               serviceSubCategoryDataList: serviceCategoryData.subcategory,
               appBarTitle: serviceCategoryData.cname,
